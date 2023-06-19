@@ -6,17 +6,19 @@ import {
   ActivityIndicator,
 } from 'react-native'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { ChevronRight, ArrowLeftFromLine } from 'lucide-react-native'
 import { Link, useRouter } from 'expo-router'
 import { signOut } from 'firebase/auth'
-import { FIREBASE_AUTH } from '../firebaseConfig'
+import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig'
+import { collection, onSnapshot, query } from 'firebase/firestore'
 
 import Logo from '../src/assets/nlw-spacetime-logo.svg'
 
 export default function Home() {
   const [loading, setLoading] = useState(false)
+  const [cases, setCases] = useState([])
   const router = useRouter()
   const auth = FIREBASE_AUTH
   const logOut = async () => {
@@ -31,6 +33,17 @@ export default function Home() {
       setLoading(false)
     }
   }
+  useEffect(() => {
+    const q = query(collection(FIREBASE_DB, 'cases'))
+    onSnapshot(q, (querySnapshot) => {
+      setCases(
+        querySnapshot.docs.map((doc) => ({
+          data: doc.data(),
+        })),
+      )
+    })
+  }, [])
+
   return (
     <ScrollView className="bg-white-100 pt-8">
       <View className="w-full flex-row justify-between px-10 pt-10">
@@ -49,96 +62,39 @@ export default function Home() {
           Escolha um dos casos abaixo e salve o dia.
         </Text>
       </View>
-      <View className="mx-6 mb-4 items-center">
-        <View className="h-60 w-full  rounded-lg bg-white-50">
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">CASO:</Text>
-              <Text className="text-base">Cadelinha atropelada</Text>
+      {cases.map((cas) => (
+        <View className="mx-6 mb-4 items-center" key={cas.data.description}>
+          <View className="h-60 w-full  rounded-lg bg-white-50">
+            <View className="flex-row">
+              <View className="mx-6 my-6 w-1/2">
+                <Text className="text-sm font-bold">CASO:</Text>
+                <Text className="text-base">{cas.data.description}</Text>
+              </View>
+              <View className="mx-6 my-6 w-1/2">
+                <Text className="text-sm font-bold">ONG:</Text>
+                <Text className="text-base">{cas.data.ongname}</Text>
+              </View>
             </View>
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">ONG:</Text>
-              <Text className="text-base">APAD</Text>
+            <View className="flex-row">
+              <View className="mx-6 my-6 w-1/2">
+                <Text className="text-sm font-bold">VALOR:</Text>
+                <Text className="text-base">{cas.data.value}</Text>
+              </View>
             </View>
-          </View>
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">VALOR:</Text>
-              <Text className="text-base">R$ 120,00</Text>
+            <View className="h-14 w-full border-t border-t-gray-50">
+              <Link href="/detail" asChild>
+                <TouchableOpacity className="ml-6 mr-5 mt-4 h-full flex-row justify-between">
+                  <Text className="font-semibold text-red-50">
+                    Ver mais detalhes
+                  </Text>
+                  <ChevronRight color="#E02041" />
+                </TouchableOpacity>
+              </Link>
             </View>
-          </View>
-          <View className="h-14 w-full border-t border-t-gray-50">
-            <Link href="/detail" asChild>
-              <TouchableOpacity className="ml-6 mr-5 mt-4 h-full flex-row justify-between">
-                <Text className="font-semibold text-red-50">
-                  Ver mais detalhes
-                </Text>
-                <ChevronRight color="#E02041" />
-              </TouchableOpacity>
-            </Link>
           </View>
         </View>
-      </View>
-      <View className="mx-6 mb-4 items-center">
-        <View className="h-60 w-full  rounded-lg bg-white-50">
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">CASO:</Text>
-              <Text className="text-base">Cadelinha atropelada</Text>
-            </View>
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">ONG:</Text>
-              <Text className="text-base">APAD</Text>
-            </View>
-          </View>
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">VALOR:</Text>
-              <Text className="text-base">R$ 120,00</Text>
-            </View>
-          </View>
-          <View className="h-14 w-full border-t border-t-gray-50">
-            <Link href="/detail" asChild>
-              <TouchableOpacity className="ml-6 mr-5 mt-4 h-full flex-row justify-between">
-                <Text className="font-semibold text-red-50">
-                  Ver mais detalhes
-                </Text>
-                <ChevronRight color="#E02041" />
-              </TouchableOpacity>
-            </Link>
-          </View>
-        </View>
-      </View>
-      <View className="mx-6 mb-4 items-center">
-        <View className="h-60 w-full  rounded-lg bg-white-50">
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">CASO:</Text>
-              <Text className="text-base">Cadelinha atropelada</Text>
-            </View>
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">ONG:</Text>
-              <Text className="text-base">APAD</Text>
-            </View>
-          </View>
-          <View className="flex-row">
-            <View className="mx-6 my-6 w-1/2">
-              <Text className="text-sm font-bold">VALOR:</Text>
-              <Text className="text-base">R$ 120,00</Text>
-            </View>
-          </View>
-          <View className="h-14 w-full border-t border-t-gray-50">
-            <Link href="/detail" asChild>
-              <TouchableOpacity className="ml-6 mr-5 mt-4 h-full flex-row justify-between">
-                <Text className="font-semibold text-red-50">
-                  Ver mais detalhes
-                </Text>
-                <ChevronRight color="#E02041" />
-              </TouchableOpacity>
-            </Link>
-          </View>
-        </View>
-      </View>
+      ))}
+
       <StatusBar style="dark" />
     </ScrollView>
   )
