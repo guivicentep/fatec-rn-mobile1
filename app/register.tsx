@@ -51,17 +51,9 @@ export default function Register() {
           </Text>
           <TextInput
             className="mb-3 h-14 w-72 rounded-lg border border-gray-50 bg-white-50 px-5 py-3 text-base"
-            placeholder="Nome da ONG"
-          />
-          <TextInput
-            className="mb-3 h-14 w-72 rounded-lg border border-gray-50 bg-white-50 px-5 py-3 text-base"
             placeholder="E-mail"
             onChangeText={(text) => setEmail(text)}
             value={email}
-          />
-          <TextInput
-            className="mb-3 h-14 w-72 rounded-lg border border-gray-50 bg-white-50 px-5 py-3 text-base"
-            placeholder="Usuário"
           />
           <TextInput
             className="mb-3 h-14 w-72 rounded-lg border border-gray-50 bg-white-50 px-5 py-3 text-base"
