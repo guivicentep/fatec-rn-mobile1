@@ -8,7 +8,7 @@ import {
 
 import { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { ChevronRight, ArrowLeftFromLine } from 'lucide-react-native'
+import { ChevronRight, ArrowLeftFromLine, Plus } from 'lucide-react-native'
 import { Link, useRouter } from 'expo-router'
 import { signOut } from 'firebase/auth'
 import { FIREBASE_AUTH, FIREBASE_DB } from '../firebaseConfig'
@@ -66,7 +66,7 @@ export default function Home() {
         </View>
 
         {cases.map((cas) => (
-          <View className="mx-6 mb-4 items-center" key={cas.data.description}>
+          <View className="mx-6 mb-4 items-center" key={cas.data.id}>
             <View className="h-60 w-full  rounded-lg bg-white-50">
               <View className="flex-row">
                 <View className="mx-6 my-6 w-1/2">
@@ -81,7 +81,7 @@ export default function Home() {
               <View className="flex-row">
                 <View className="mx-6 my-6 w-1/2">
                   <Text className="text-sm font-bold">VALOR:</Text>
-                  <Text className="text-base">{cas.data.value}</Text>
+                  <Text className="text-base">R$ {cas.data.value}</Text>
                 </View>
               </View>
               <View className="h-14 w-full border-t border-t-gray-50">
@@ -106,6 +106,13 @@ export default function Home() {
 
         <StatusBar style="dark" />
       </ScrollView>
+      <TouchableOpacity
+        className="absolute bottom-3 right-2 h-12 w-12 items-center justify-center rounded-full 
+    bg-red-50"
+        onPress={() => router.push('/createcase')}
+      >
+        <Plus color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
